@@ -61,6 +61,7 @@ func (s *server) generate(period time.Duration) {
 // otherwise it emits "Unknown error"
 func (s *server) root(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%v: %v", r.URL.Path, r.Method)
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "ok\n")
 }
 
@@ -86,7 +87,7 @@ func (s *server) annotations(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) filterEvents(a Annotation, from, to time.Time) []AnnotationResponse {
-	events := []AnnotationResponse{}
+	events := make([]AnnotationResponse, 0)
 	for _, event := range s.events {
 		event.Annotation = a
 		event.Annotation.ShowLine = true
